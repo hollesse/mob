@@ -25,6 +25,7 @@ jobs:
         with:
           go-version: '~1.16.0'
       - name: Test
+        if: matrix.arch == 'amd64'
         run: go test
         env:
           GOOS: linux # the tests will only run if the os matches the os of the system of run-on
