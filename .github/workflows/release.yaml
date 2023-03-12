@@ -46,4 +46,4 @@ jobs:
         if: matrix.os == 'darwin' || matrix.os == 'linux'
         id: shasum
         run: |
-          echo ::set-output name=sha_${{matrix.os}}_${{matrix.arch}}::"$(shasum -a 256 *.tar.gz | awk '{printf $1}')"
+          echo ::set-output name=sha_${{matrix.os}}_::"$(shasum -a 256 *.tar.gz | awk '{printf $1}')"
