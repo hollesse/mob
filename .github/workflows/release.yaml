@@ -11,7 +11,7 @@ jobs:
       GOARCH: amd64
       GOOS: ${{ matrix.os }}
     name: release
-    runs-on: ${{ matrix.os == 'darwin' && 'macos-latest' || 'linux-latest'}}
+    runs-on: ${{ matrix.os == 'darwin' && 'macos-latest' || 'ubuntu-latest'}}
     outputs:
       sha_linux: ${{ steps.shasum.outputs.sha_linux }}
     steps:
