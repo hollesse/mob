@@ -25,7 +25,7 @@ jobs:
         run: go build -o mob${{ matrix.os == 'windows' && '.exe' || '' }}
         env:
           GOOS: ${{ matrix.os }}
-      - name: Build
+      - name: Build macOS universal
         if: ${{ matrix.os == 'darwin' }}
         run: >
           GOARCH=amd64 go build -o mob_amd64 && GOARCH=arm64 go build -o mob_arm64 && lipo -create -output mob mob_amd64 mob_arm64
