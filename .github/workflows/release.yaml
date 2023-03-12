@@ -7,15 +7,11 @@ jobs:
     strategy:
       matrix:
         os: [linux, darwin, windows]
-        arch: [ amd64 ]
-        include:
-          - os: darwin
-            arch: arm64
     env:
-      GOARCH: ${{ matrix.arch }}
+      GOARCH: amd64
       GOOS: ${{ matrix.os }}
     name: release
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os == 'darwin' && 'macos-latest' || 'linux-latest'}}
     outputs:
       sha_linux: ${{ steps.shasum.outputs.sha_linux }}
     steps:
@@ -25,7 +21,14 @@ jobs:
         with:
           go-version: '~1.16.0'
       - name: Build
+        if: ${{ matrix.os != 'darwin' }}
         run: go build -o mob${{ matrix.os == 'windows' && '.exe' || '' }}
+        env:
+          GOOS: ${{ matrix.os }}
+      - name: Build
+        if: ${{ matrix.os == 'darwin' }}
+        run: >
+          GOARCH=amd64 go build -o mob_amd64 && GOARCH=arm64 go build -o mob_arm64 && lipo -create -output mob mob_amd64 mob_arm64
         env:
           GOOS: ${{ matrix.os }}
       - name: Create release artifacts using .github/build
